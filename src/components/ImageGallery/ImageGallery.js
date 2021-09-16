@@ -11,7 +11,6 @@ export default function ImageGallery({ images, onClick }) {
           id={image.id}
           urlImage={image.webformatURL}
           tagImage={image.tags}
-          value={image.largeImageURL}
           onClick={onClick}
         />
       ))}

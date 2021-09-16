@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+
 import ImageGallery from './components/ImageGallery/ImageGallery';
 import Button from './components/Button/Button';
 import Searchbar from './components/Searchbar/Searchbar';
 import Loader from 'react-loader-spinner';
 import Modal from './components/Modal/Modal';
+import apiService from './apiServiсe/apiService';
 
 class App extends Component {
   state = {
@@ -21,24 +23,20 @@ class App extends Component {
     tags: '',
   };
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchValue !== this.state.searchValue) {
+    const searchValue = this.state.searchValue;
+    const page = this.state.page;
+    if (prevState.searchValue !== searchValue) {
       this.setState({ loading: true });
       setTimeout(() => {
-        fetch(
-          `https://pixabay.com/api/?q=${this.state.searchValue}&page=${this.state.page}&key=22463604-709d4d80ecefd06266ae1aa7f&image_type=photo&orientation=horizontal&per_page=12`,
-        )
-          .then(r => r.json())
+        apiService(searchValue, page)
           .then(respons => this.setState({ images: respons.hits }))
           .catch(error => toast.error(`${error}`))
           .finally(this.setState({ loading: false }));
       }, 1000);
     }
-    if (prevState.page !== this.state.page) {
+    if (prevState.page !== page) {
       this.setState({ loading: true });
-      fetch(
-        `https://pixabay.com/api/?q=${this.state.searchValue}&page=${this.state.page}&key=22463604-709d4d80ecefd06266ae1aa7f&image_type=photo&orientation=horizontal&per_page=12`,
-      )
-        .then(r => r.json())
+      apiService(searchValue, page)
         .then(respons =>
           this.setState({ images: [...this.state.images, ...respons.hits] }),
         )
@@ -72,6 +70,7 @@ class App extends Component {
     this.setState({ largeImageURL: image.largeImageURL });
     this.setState({ tags: image.tags });
   };
+
   render() {
     return (
       <div className="App">
@@ -97,7 +96,7 @@ class App extends Component {
             imageUrl={this.state.largeImageURL}
             tags={this.state.tags}
             onClose={this.toggleModal}
-          ></Modal>
+          />
         )}
         <ToastContainer autoClose={2000} />
       </div>

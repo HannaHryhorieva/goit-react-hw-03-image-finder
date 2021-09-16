@@ -1,11 +1,5 @@
 import PropTypes from 'prop-types';
-export default function ImageGalleryItem({
-  id,
-  urlImage,
-  tagImage,
-  value,
-  onClick,
-}) {
+export default function ImageGalleryItem({ id, urlImage, tagImage, onClick }) {
   return (
     <li className="ImageGalleryItem" onClick={onClick}>
       <img
@@ -13,7 +7,6 @@ export default function ImageGalleryItem({
         src={urlImage}
         alt={tagImage}
         className="ImageGalleryItem-image"
-        value={value}
       />
     </li>
   );
@@ -22,6 +15,5 @@ ImageGalleryItem.propTypes = {
   id: PropTypes.number,
   urlImage: PropTypes.string,
   tagImage: PropTypes.string,
-  value: PropTypes.string,
   onClick: PropTypes.func,
 };
